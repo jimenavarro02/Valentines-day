@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VALENTINE</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* Pantalla inicial */
+#intro {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    animation: introAnim 2s ease;
+}
+
+@keyframes introAnim {
+    from {opacity:0; transform: scale(0.5);}
+    to {opacity:1; transform: scale(1);}
+}
+
+#intro h1 {
+    font-size: 45px;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+#intro p {
+    font-size: 20px;
+    color: white;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% {opacity:1;}
+    50% {opacity:0.3;}
+    100% {opacity:1;}
+}
+
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+
+/* Contenedor principal */
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    animation: aparecer 1s ease;
+    display: none;
+    max-width: 90%;
+}
+
+@keyframes aparecer {
+    from {transform: scale(0.5); opacity:0;}
+    to {transform: scale(1); opacity:1;}
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #f57c80;
+    color: white;
+}
+
+/* Botones centrados */
+#buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+}
+
+/* Mensaje final */
+.final-message {
+    display: none;
+    font-size: 26px;
+    color: #e05155;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Fondo cuando dice que sí */
+.fondo-si {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+/* corazones */
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #intro h1 {
+        font-size: 32px;
+    }
+
+    .final-message {
+        font-size: 22px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 10px 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Pantalla inicial -->
+<div id="intro">
+    <h1>💗 VALENTINE'S DAY 💗</h1>
+    <p>Presiona en cualquier lado para continuar...</p>
+</div>
+
+<!-- Contenido principal -->
+<div class="container" id="mainContent">
+    <h1 id="question">¿Quieres ser mi Valentine? 💗</h1>
+
+    <div id="buttons">
+        <button id="yes">SÍ</button>
+        <button id="no">NO</button>
+    </div>
+
+    <div id="final" class="final-message"></div>
+    <button id="surpriseBtn" style="display:none;">🎁 Sorpresa</button>
+</div>
+
+<script>
+const intro = document.getElementById("intro");
+const mainContent = document.getElementById("mainContent");
+
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const final = document.getElementById("final");
+const buttons = document.getElementById("buttons");
+const question = document.getElementById("question");
+const surpriseBtn = document.getElementById("surpriseBtn");
+
+// Entrar tocando pantalla o click
+intro.addEventListener("click", function() {
+    intro.style.display = "none";
+    mainContent.style.display = "block";
+});
+
+// Botón NO se mueve
+noBtn.onmouseover = function() {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+// Botón SÍ
+yesBtn.onclick = function() {
+    question.style.display = "none";
+    buttons.style.display = "none";
+
+    document.body.classList.add("fondo-si");
+
+    final.style.display = "block";
+    final.innerHTML = "Eres el mejor 💗<br>Gracias por permitirme pasar un 2° San Valentine a tu lado.<br>Te amo 💗";
+
+    surpriseBtn.style.display = "inline-block";
+
+    setInterval(crearCorazon, 150);
+}
+
+// Botón sorpresa
+surpriseBtn.onclick = function() {
+    final.innerHTML += "<br><br>✨ PD: Eres mi persona favorita en el mundo 💗";
+    surpriseBtn.style.display = "none";
+}
+
+// corazones flotando
+function crearCorazon() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💗";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = Math.random() * 30 + 10 + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
